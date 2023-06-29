@@ -1,0 +1,6 @@
+.idea
+*.iml
+
+target
+.flattened-pom.xml
+dependency-reduced-pom.xml

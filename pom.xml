@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.cosium.maven_oss</groupId>
+    <artifactId>maven-oss</artifactId>
+    <version>1.1</version>
+  </parent>
+  <groupId>com.cosium.matrix_communication_client</groupId>
+  <artifactId>matrix-communication-client</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <slf4j.version>2.0.7</slf4j.version>
+
+    <jackson.version>2.14.2</jackson.version>
+    <junit.version>5.8.2</junit.version>
+    <assertj.version>3.24.2</assertj.version>
+
+    <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.jr</groupId>
+      <artifactId>jackson-jr-objects</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+  <plugins>
+    <plugin>
+      <groupId>com.cosium.code</groupId>
+      <artifactId>git-code-format-maven-plugin</artifactId>
+      <version>${git-code-format-maven-plugin.version}</version>
+      <executions>
+        <!-- On commit, format the modified files -->
+        <execution>
+          <id>install-formatter-hook</id>
+          <goals>
+            <goal>install-hooks</goal>
+          </goals>
+        </execution>
+        <!-- On Maven verify phase, fail if any file
+        (including unmodified) is badly formatted -->
+        <execution>
+          <id>validate-code-format</id>
+          <goals>
+            <goal>validate-code-format</goal>
+          </goals>
+        </execution>
+      </executions>
+      <dependencies>
+        <!-- Enable https://github.com/google/google-java-format -->
+        <dependency>
+          <groupId>com.cosium.code</groupId>
+          <artifactId>google-java-format</artifactId>
+          <version>${git-code-format-maven-plugin.version}</version>
+        </dependency>
+      </dependencies>
+    </plugin>
+  </plugins>
+</build>
+</project>
