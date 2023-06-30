@@ -4,3 +4,42 @@
 
 # Matrix Communication Client
 
+A [Matrix](https://matrix.org/) java client.
+
+# Example
+
+```java
+public class Example {
+
+  public static void main(String[] args) {
+    MatrixResources matrix =
+        MatrixResources.factory()
+            .builder()
+            .https(false)
+            .hostname("matrix.example.org")
+            .usernamePassword("jdoe", "secret")
+            .build();
+
+	RoomResource room = matrix
+        .rooms()
+        .create(
+            CreateRoomInput.builder()
+                .name(UUID.randomUUID().toString())
+                .roomAliasName(UUID.randomUUID().toString())
+                .topic(UUID.randomUUID().toString())
+                .build());
+	
+	room.sendMessage(Message.builder().body("body").formattedBody("formattedBody").build());
+  }
+}
+```
+
+# Dependency
+
+```xml
+<dependency>
+  <groupId>com.cosium.matrix_communication_client</groupId>
+  <artifactId>matrix-communication-client</artifactId>
+  <verion>${matrix-communication-client.version}</verion>
+</dependency>
+```
