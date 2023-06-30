@@ -15,21 +15,21 @@ public class Example {
     MatrixResources matrix =
         MatrixResources.factory()
             .builder()
-            .https(false)
+            .https()
             .hostname("matrix.example.org")
             .usernamePassword("jdoe", "secret")
             .build();
 
-	RoomResource room = matrix
+    RoomResource room = matrix
         .rooms()
         .create(
             CreateRoomInput.builder()
-                .name(UUID.randomUUID().toString())
-                .roomAliasName(UUID.randomUUID().toString())
-                .topic(UUID.randomUUID().toString())
+                .name("Science")
+                .roomAliasName("science")
+                .topic("Anything about science")
                 .build());
 	
-	room.sendMessage(Message.builder().body("body").formattedBody("formattedBody").build());
+    room.sendMessage(Message.builder().body("Hello !").formattedBody("<b>Hello !</b>").build());
   }
 }
 ```
