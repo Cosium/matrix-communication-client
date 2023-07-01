@@ -11,18 +11,18 @@ import java.util.stream.Stream;
  */
 class MatrixUri {
 
-  private final URI value;
+  private final URI uriValue;
 
   public MatrixUri(String value) {
     this(URI.create(value));
   }
 
   public MatrixUri(URI value) {
-    this.value = requireNonNull(value);
+    this.uriValue = requireNonNull(value);
   }
 
   public MatrixUri addPathSegments(String... pathSegment) {
-    String genuinePath = value.getPath();
+    String genuinePath = uriValue.getPath();
     if (genuinePath.endsWith("/")) {
       genuinePath = genuinePath.substring(0, genuinePath.length() - 1);
     }
@@ -38,13 +38,42 @@ class MatrixUri {
     try {
       return new MatrixUri(
           new URI(
-              value.getScheme(),
-              value.getUserInfo(),
-              value.getHost(),
-              value.getPort(),
+              uriValue.getScheme(),
+              uriValue.getUserInfo(),
+              uriValue.getHost(),
+              uriValue.getPort(),
               pathBuilder.toString(),
-              value.getQuery(),
-              value.getFragment()));
+              uriValue.getQuery(),
+              uriValue.getFragment()));
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public MatrixUri addQueryParameter(String name, String value) {
+    if (value == null) {
+      return this;
+    }
+
+    String genuineQuery = uriValue.getQuery();
+    StringBuilder newQuery;
+    if (genuineQuery != null && !genuineQuery.isBlank()) {
+      newQuery = new StringBuilder(uriValue.getQuery()).append("&");
+    } else {
+      newQuery = new StringBuilder();
+    }
+    newQuery.append(name).append("=").append(value);
+
+    try {
+      return new MatrixUri(
+          new URI(
+              uriValue.getScheme(),
+              uriValue.getUserInfo(),
+              uriValue.getHost(),
+              uriValue.getPort(),
+              uriValue.getPath(),
+              newQuery.toString(),
+              uriValue.getFragment()));
     } catch (URISyntaxException e) {
       throw new RuntimeException(e);
     }
@@ -65,6 +94,6 @@ class MatrixUri {
   }
 
   public URI toUri() {
-    return value;
+    return uriValue;
   }
 }

@@ -43,14 +43,28 @@ class RoomResourceTest {
   void test2() {
     Message message = Message.builder().body("body").formattedBody("formattedBody").build();
     Message fetchedMessage = createRoom().sendMessage(message).fetch().content(Message.class);
-    assertThat(List.of(message))
+
+    assertThat(List.of(fetchedMessage))
         .extracting(Message::body, Message::format, Message::formattedBody, Message::type)
         .containsExactly(
-            tuple(
-                fetchedMessage.body(),
-                fetchedMessage.format(),
-                fetchedMessage.formattedBody(),
-                fetchedMessage.type()));
+            tuple(message.body(), message.format(), message.formattedBody(), message.type()));
+  }
+
+  @Test
+  @DisplayName("Fetch event page")
+  void test3() {
+    Message message = Message.builder().body("body").formattedBody("formattedBody").build();
+    RoomResource room = createRoom();
+    room.sendMessage(message);
+
+    ClientEventPage eventPage = room.fetchEventPage(null, null, null, null);
+    List<ClientEvent> fetchedEvents = eventPage.chunk();
+    assertThat(fetchedEvents)
+        .filteredOn(clientEvent -> "m.room.message".equals(clientEvent.type()))
+        .map(clientEvent -> clientEvent.content(Message.class))
+        .extracting(Message::body, Message::format, Message::formattedBody, Message::type)
+        .containsExactly(
+            tuple(message.body(), message.format(), message.formattedBody(), message.type()));
   }
 
   private RoomResource createRoom() {
