@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.tuple;
 
-import com.cosium.matrix_communication_client.test_infrastructure.synapse.EnableSynapseServer;
-import com.cosium.matrix_communication_client.test_infrastructure.synapse.SynapseServer;
+import com.cosium.synapse_junit_extension.EnableSynapse;
+import com.cosium.synapse_junit_extension.Synapse;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,20 +15,20 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Réda Housni Alaoui
  */
-@EnableSynapseServer
+@EnableSynapse
 class RoomResourceTest {
 
   private MatrixResources resources;
 
   @BeforeEach
-  void beforeEach(SynapseServer synapseServer) {
+  void beforeEach(Synapse synapse) {
     resources =
         MatrixResources.factory()
             .builder()
-            .https(false)
-            .hostname("localhost")
-            .port(synapseServer.port())
-            .usernamePassword(synapseServer.adminUsername(), synapseServer.adminPassword())
+            .https(synapse.https())
+            .hostname(synapse.hostname())
+            .port(synapse.port())
+            .usernamePassword(synapse.adminUsername(), synapse.adminPassword())
             .build();
   }
 
