@@ -1,9 +1,9 @@
-package com.cosium.matrix_communication_client.internal;
+package com.cosium.matrix_communication_client;
 
 /**
  * @author Réda Housni Alaoui
  */
-public class JsonBody<T> {
+class JsonBody<T> {
 
   private final int responseStatusCode;
   private final T body;

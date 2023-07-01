@@ -1,4 +1,4 @@
-package com.cosium.matrix_communication_client.internal;
+package com.cosium.matrix_communication_client;
 
 import java.net.http.HttpResponse;
 

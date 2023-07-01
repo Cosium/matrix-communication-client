@@ -2,7 +2,6 @@ package com.cosium.matrix_communication_client;
 
 import static java.util.Objects.requireNonNull;
 
-import com.cosium.matrix_communication_client.internal.JsonBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
