@@ -9,5 +9,7 @@ public interface MatrixResources {
     return new MatrixResourcesFactory();
   }
 
+  AccessTokensResource accessTokens();
+
   RoomsResource rooms();
 }
