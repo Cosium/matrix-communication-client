@@ -20,6 +20,11 @@ class SimpleRoomResource implements RoomResource {
   }
 
   @Override
+  public String id() {
+    return id;
+  }
+
+  @Override
   public ClientEventResource sendMessage(Message message) {
     CreatedEvent createdEvent = api.get().sendMessageToRoom(message, id);
     return new SimpleClientEventResource(api, objectMapper, id, createdEvent.id());
