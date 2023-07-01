@@ -3,6 +3,7 @@ package com.cosium.matrix_communication_client;
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.util.UUID;
@@ -87,6 +88,37 @@ class MatrixApi {
 
     try {
       return httpClient.send(request, jsonHandlers.handler(RawClientEvent.class)).body().parse();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new RuntimeException(e);
+    }
+  }
+
+  public RawClientEventPage fetchMessagePage(
+      String roomId, String dir, String from, String limit, String to) {
+    URI uri =
+        baseUri
+            .addPathSegments("rooms", roomId, "messages")
+            .addQueryParameter("dir", dir)
+            .addQueryParameter("from", from)
+            .addQueryParameter("limit", limit)
+            .addQueryParameter("to", to)
+            .toUri();
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(uri)
+            .header("Authorization", String.format("Bearer %s", accessTokenFactory.build()))
+            .header("Accept", APPLICATION_JSON)
+            .GET()
+            .build();
+
+    try {
+      return httpClient
+          .send(request, jsonHandlers.handler(RawClientEventPage.class))
+          .body()
+          .parse();
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {

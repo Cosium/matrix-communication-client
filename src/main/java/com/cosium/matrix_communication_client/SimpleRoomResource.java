@@ -1,6 +1,7 @@
 package com.cosium.matrix_communication_client;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,5 +29,14 @@ class SimpleRoomResource implements RoomResource {
   public ClientEventResource sendMessage(Message message) {
     CreatedEvent createdEvent = api.get().sendMessageToRoom(message, id);
     return new SimpleClientEventResource(api, objectMapper, id, createdEvent.id());
+  }
+
+  @Override
+  public ClientEventPage fetchEventPage(String dir, String from, Long limit, String to) {
+    RawClientEventPage raw =
+        api.get()
+            .fetchMessagePage(
+                id, dir, from, ofNullable(limit).map(String::valueOf).orElse(null), to);
+    return new ClientEventPage(objectMapper, raw);
   }
 }
