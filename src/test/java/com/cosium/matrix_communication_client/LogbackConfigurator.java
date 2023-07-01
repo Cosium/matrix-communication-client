@@ -1,4 +1,4 @@
-package com.cosium.matrix_communication_client.test_infrastructure;
+package com.cosium.matrix_communication_client;
 
 import ch.qos.logback.classic.BasicConfigurator;
 import ch.qos.logback.classic.Level;
