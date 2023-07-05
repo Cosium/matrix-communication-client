@@ -2,6 +2,7 @@ package com.cosium.matrix_communication_client;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
 
 /**
  * @author Réda Housni Alaoui
@@ -16,12 +17,17 @@ class SimpleMatrixResources implements MatrixResources {
       boolean https,
       String hostname,
       Integer port,
+      Duration connectTimeout,
       AccessTokenFactoryFactory accessTokenFactoryFactory) {
     objectMapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     MatrixUris matrixUris = new MatrixUris(https, new MatrixHostname(hostname), port);
     JsonHandlers jsonHandlers = new JsonHandlers(objectMapper);
-    accessTokenFactory = accessTokenFactoryFactory.build(jsonHandlers, matrixUris);
-    api = Lazy.of(() -> MatrixApi.load(jsonHandlers, matrixUris, accessTokenFactory));
+    HttpClientFactory httpClientFactory = new HttpClientFactory(connectTimeout);
+    accessTokenFactory =
+        accessTokenFactoryFactory.build(httpClientFactory, jsonHandlers, matrixUris);
+    api =
+        Lazy.of(
+            () -> MatrixApi.load(httpClientFactory, jsonHandlers, matrixUris, accessTokenFactory));
   }
 
   @Override

@@ -15,14 +15,16 @@ class MatrixUnprotectedApi {
   private final JsonHandlers jsonHandlers;
   private final MatrixUri baseUri;
 
-  private MatrixUnprotectedApi(JsonHandlers jsonHandlers, MatrixUris uris) {
-    httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
+  private MatrixUnprotectedApi(
+      HttpClientFactory httpClientFactory, JsonHandlers jsonHandlers, MatrixUris uris) {
+    httpClient = httpClientFactory.build();
     this.jsonHandlers = requireNonNull(jsonHandlers);
     baseUri = uris.fetchBaseUri(httpClient, jsonHandlers);
   }
 
-  public static MatrixUnprotectedApi load(JsonHandlers jsonHandlers, MatrixUris uris) {
-    return new MatrixUnprotectedApi(jsonHandlers, uris);
+  public static MatrixUnprotectedApi load(
+      HttpClientFactory httpClientFactory, JsonHandlers jsonHandlers, MatrixUris uris) {
+    return new MatrixUnprotectedApi(httpClientFactory, jsonHandlers, uris);
   }
 
   public LoginOutput login(LoginInput loginInput) {

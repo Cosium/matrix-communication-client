@@ -20,7 +20,10 @@ class MatrixApi {
   private final AccessTokenFactory accessTokenFactory;
 
   private MatrixApi(
-      JsonHandlers jsonHandlers, MatrixUris uris, AccessTokenFactory accessTokenFactory) {
+      HttpClientFactory httpClientFactory,
+      JsonHandlers jsonHandlers,
+      MatrixUris uris,
+      AccessTokenFactory accessTokenFactory) {
     httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
     this.jsonHandlers = requireNonNull(jsonHandlers);
     baseUri = uris.fetchBaseUri(httpClient, jsonHandlers);
@@ -28,8 +31,11 @@ class MatrixApi {
   }
 
   public static MatrixApi load(
-      JsonHandlers jsonHandlers, MatrixUris uris, AccessTokenFactory accessTokenFactory) {
-    return new MatrixApi(jsonHandlers, uris, accessTokenFactory);
+      HttpClientFactory httpClientFactory,
+      JsonHandlers jsonHandlers,
+      MatrixUris uris,
+      AccessTokenFactory accessTokenFactory) {
+    return new MatrixApi(httpClientFactory, jsonHandlers, uris, accessTokenFactory);
   }
 
   public CreatedEvent sendMessageToRoom(Message input, String roomId) {
