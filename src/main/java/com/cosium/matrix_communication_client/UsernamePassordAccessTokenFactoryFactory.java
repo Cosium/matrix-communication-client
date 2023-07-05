@@ -16,8 +16,11 @@ class UsernamePassordAccessTokenFactoryFactory implements AccessTokenFactoryFact
   }
 
   @Override
-  public AccessTokenFactory build(JsonHandlers jsonHandlers, MatrixUris uris) {
+  public AccessTokenFactory build(
+      HttpClientFactory httpClientFactory, JsonHandlers jsonHandlers, MatrixUris uris) {
     return new UsernamePassordAccessTokenFactory(
-        Lazy.of(() -> MatrixUnprotectedApi.load(jsonHandlers, uris)), username, password);
+        Lazy.of(() -> MatrixUnprotectedApi.load(httpClientFactory, jsonHandlers, uris)),
+        username,
+        password);
   }
 }

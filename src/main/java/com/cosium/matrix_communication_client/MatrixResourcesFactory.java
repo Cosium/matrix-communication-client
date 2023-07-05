@@ -1,4 +1,7 @@
 package com.cosium.matrix_communication_client;
+
+import java.time.Duration;
+
 /**
  * @author Réda Housni Alaoui
  */
@@ -40,6 +43,9 @@ public class MatrixResourcesFactory {
   }
 
   public interface FinalBuilder {
+
+    FinalBuilder connectTimeout(Duration connectTimeout);
+
     MatrixResources build();
   }
 
@@ -49,6 +55,7 @@ public class MatrixResourcesFactory {
     private boolean https = true;
     private String hostname;
     private Integer port;
+    private Duration connectTimeout;
     private AccessTokenFactoryFactory accessTokenFactoryFactory;
 
     @Override
@@ -71,7 +78,7 @@ public class MatrixResourcesFactory {
 
     @Override
     public MatrixResourcesBuilder accessToken(String accessToken) {
-      accessTokenFactoryFactory = (j, u) -> () -> accessToken;
+      accessTokenFactoryFactory = (h, j, u) -> () -> accessToken;
       return this;
     }
 
@@ -81,8 +88,15 @@ public class MatrixResourcesFactory {
       return this;
     }
 
+    @Override
+    public FinalBuilder connectTimeout(Duration connectTimeout) {
+      this.connectTimeout = connectTimeout;
+      return this;
+    }
+
     public MatrixResources build() {
-      return new SimpleMatrixResources(https, hostname, port, accessTokenFactoryFactory);
+      return new SimpleMatrixResources(
+          https, hostname, port, connectTimeout, accessTokenFactoryFactory);
     }
   }
 }

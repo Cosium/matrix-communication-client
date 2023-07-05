@@ -5,5 +5,6 @@ package com.cosium.matrix_communication_client;
  */
 interface AccessTokenFactoryFactory {
 
-  AccessTokenFactory build(JsonHandlers jsonHandlers, MatrixUris uris);
+  AccessTokenFactory build(
+      HttpClientFactory httpClientFactory, JsonHandlers jsonHandlers, MatrixUris uris);
 }
