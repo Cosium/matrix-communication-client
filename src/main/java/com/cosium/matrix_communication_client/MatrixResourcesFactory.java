@@ -1,6 +1,7 @@
 package com.cosium.matrix_communication_client;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 /**
  * @author Réda Housni Alaoui
@@ -55,7 +56,7 @@ public class MatrixResourcesFactory {
     private boolean https = true;
     private String hostname;
     private Integer port;
-    private Duration connectTimeout;
+    private Duration connectTimeout = Duration.of(30, ChronoUnit.SECONDS);
     private AccessTokenFactoryFactory accessTokenFactoryFactory;
 
     @Override
