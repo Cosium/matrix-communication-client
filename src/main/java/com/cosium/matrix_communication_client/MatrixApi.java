@@ -24,7 +24,7 @@ class MatrixApi {
       JsonHandlers jsonHandlers,
       MatrixUris uris,
       AccessTokenFactory accessTokenFactory) {
-    httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
+    httpClient = httpClientFactory.build();
     this.jsonHandlers = requireNonNull(jsonHandlers);
     baseUri = uris.fetchBaseUri(httpClient, jsonHandlers);
     this.accessTokenFactory = requireNonNull(accessTokenFactory);
