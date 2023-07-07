@@ -36,7 +36,11 @@ class MatrixUnprotectedApi {
             .build();
 
     try {
-      return httpClient.send(loginRequest, jsonHandlers.handler(LoginOutput.class)).body().parse();
+      return httpClient
+          .send(loginRequest, jsonHandlers.handler(LoginOutput.class))
+          .body()
+          .get()
+          .parse();
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
