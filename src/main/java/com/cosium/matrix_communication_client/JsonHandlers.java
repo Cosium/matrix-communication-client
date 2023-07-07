@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.function.Supplier;
 
 /**
  * @author Réda Housni Alaoui
@@ -31,34 +32,35 @@ class JsonHandlers {
     }
   }
 
-  public <T> HttpResponse.BodyHandler<JsonBody<T>> handler(Class<T> type) {
+  public <T> HttpResponse.BodyHandler<Supplier<JsonBody<T>>> handler(Class<T> type) {
     return responseInfo ->
         createBodySubscriber(
             responseInfo, inputStream -> objectMapper.readValue(inputStream, type));
   }
 
-  public <T> HttpResponse.BodyHandler<JsonBody<T>> handler(TypeReference<T> type) {
+  public <T> HttpResponse.BodyHandler<Supplier<JsonBody<T>>> handler(TypeReference<T> type) {
     return responseInfo ->
         createBodySubscriber(
             responseInfo, inputStream -> objectMapper.readValue(inputStream, type));
   }
 
-  private <T> HttpResponse.BodySubscriber<JsonBody<T>> createBodySubscriber(
+  private <T> HttpResponse.BodySubscriber<Supplier<JsonBody<T>>> createBodySubscriber(
       HttpResponse.ResponseInfo responseInfo, ContentParser<T> contentParser) {
     int statusCode = responseInfo.statusCode();
     if (statusCode != 200) {
-      return HttpResponse.BodySubscribers.replacing(new JsonBody<>(statusCode, null));
+      return HttpResponse.BodySubscribers.replacing(() -> new JsonBody<>(statusCode, null));
     }
 
     return HttpResponse.BodySubscribers.mapping(
         HttpResponse.BodySubscribers.ofInputStream(),
-        inputStream -> {
-          try {
-            return new JsonBody<>(statusCode, contentParser.parse(inputStream));
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        });
+        is ->
+            () -> {
+              try (InputStream inputStream = is) {
+                return new JsonBody<>(statusCode, contentParser.parse(inputStream));
+              } catch (IOException e) {
+                throw new UncheckedIOException(e);
+              }
+            });
   }
 
   private interface ContentParser<T> {

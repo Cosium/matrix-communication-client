@@ -54,7 +54,11 @@ class MatrixApi {
             .build();
 
     try {
-      return httpClient.send(request, jsonHandlers.handler(CreatedEvent.class)).body().parse();
+      return httpClient
+          .send(request, jsonHandlers.handler(CreatedEvent.class))
+          .body()
+          .get()
+          .parse();
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -74,7 +78,11 @@ class MatrixApi {
             .build();
 
     try {
-      return httpClient.send(request, jsonHandlers.handler(CreateRoomOutput.class)).body().parse();
+      return httpClient
+          .send(request, jsonHandlers.handler(CreateRoomOutput.class))
+          .body()
+          .get()
+          .parse();
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -93,7 +101,11 @@ class MatrixApi {
             .build();
 
     try {
-      return httpClient.send(request, jsonHandlers.handler(RawClientEvent.class)).body().parse();
+      return httpClient
+          .send(request, jsonHandlers.handler(RawClientEvent.class))
+          .body()
+          .get()
+          .parse();
     } catch (IOException e) {
       throw new RuntimeException(e);
     } catch (InterruptedException e) {
@@ -124,6 +136,7 @@ class MatrixApi {
       return httpClient
           .send(request, jsonHandlers.handler(RawClientEventPage.class))
           .body()
+          .get()
           .parse();
     } catch (IOException e) {
       throw new RuntimeException(e);

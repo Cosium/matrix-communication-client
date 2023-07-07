@@ -34,7 +34,8 @@ class WellKnownMatrixClient {
                       .GET()
                       .build(),
                   jsonHandlers.handler(WellKnownMatrixClient.class))
-              .body();
+              .body()
+              .get();
       if (response.isNotFound()) {
         return Optional.empty();
       }
