@@ -17,6 +17,7 @@ public class Example {
             .builder()
             .https()
             .hostname("matrix.example.org")
+            .defaultPort()
             .usernamePassword("jdoe", "secret")
             .build();
 
@@ -28,6 +29,30 @@ public class Example {
                 .roomAliasName("science")
                 .topic("Anything about science")
                 .build());
+	
+    room.sendMessage(Message.builder().body("Hello !").formattedBody("<b>Hello !</b>").build());
+  }
+}
+```
+
+Another example with existing room:
+
+```java
+public class Example {
+
+  public static void main(String[] args) {
+    MatrixResources matrix =
+        MatrixResources.factory()
+            .builder()
+            .https()
+            .hostname("matrix.example.org")
+            .defaultPort()
+            .usernamePassword("jdoe", "secret")
+            .build();
+
+    RoomResource room = matrix
+        .rooms()
+        .byId("!PVvauSmjcHLwoAJkyT:matrix.example.org");
 	
     room.sendMessage(Message.builder().body("Hello !").formattedBody("<b>Hello !</b>").build());
   }
