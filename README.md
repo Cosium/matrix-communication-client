@@ -65,6 +65,6 @@ public class Example {
 <dependency>
   <groupId>com.cosium.matrix_communication_client</groupId>
   <artifactId>matrix-communication-client</artifactId>
-  <verion>${matrix-communication-client.version}</verion>
+  <version>${matrix-communication-client.version}</version>
 </dependency>
 ```
