@@ -3,11 +3,11 @@ package com.cosium.matrix_communication_client;
 /**
  * @author Réda Housni Alaoui
  */
-class UsernamePassordAccessTokenFactory implements AccessTokenFactory {
+class UsernamePasswordAccessTokenFactory implements AccessTokenFactory {
 
   private final Lazy<String> accessToken;
 
-  public UsernamePassordAccessTokenFactory(
+  public UsernamePasswordAccessTokenFactory(
       Lazy<MatrixUnprotectedApi> api, String username, String password) {
     accessToken =
         Lazy.of(

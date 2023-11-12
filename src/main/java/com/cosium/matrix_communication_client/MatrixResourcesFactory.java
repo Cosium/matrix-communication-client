@@ -85,7 +85,7 @@ public class MatrixResourcesFactory {
 
     @Override
     public FinalBuilder usernamePassword(String username, String password) {
-      accessTokenFactoryFactory = new UsernamePassordAccessTokenFactoryFactory(username, password);
+      accessTokenFactoryFactory = new UsernamePasswordAccessTokenFactoryFactory(username, password);
       return this;
     }
 
